@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operations Portal</title>
+<style>
+  :root { --bg: #f5f6f8; --surface: #ffffff; --text: #1f2430; --muted: #6b7280; --border: #e3e6eb; --accent: #2563eb; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-weight: 700; font-size: 18px; }
+  nav a { margin-left: 20px; color: var(--muted); text-decoration: none; font-size: 14px; }
+  nav a.active { color: var(--accent); font-weight: 600; }
+  .layout { display: grid; grid-template-columns: 1fr 380px; gap: 24px; padding: 24px 28px; max-width: 1280px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .card .label { font-size: 13px; color: var(--muted); }
+  .card .value { font-size: 26px; font-weight: 700; margin-top: 6px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .panel h2 { font-size: 16px; margin: 0 0 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 6px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .chat { position: sticky; top: 24px; align-self: start; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 15px; }
+  .chat-body { min-height: 460px; padding: 14px; }
+  .embed-placeholder { border: 2px dashed var(--border); border-radius: 8px; min-height: 430px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); font-size: 14px; padding: 20px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Northwind Operations</div>
+  <nav>
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Integrations</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </nav>
+</header>
+
+<main class="layout">
+  <section>
+    <h1>Agent Overview</h1>
+    <p class="sub">Snapshot of your AI agents. Ask the assistant for more detail.</p>
+
+    <div class="cards">
+      <div class="card"><div class="label">Model invocations</div><div class="value">--</div></div>
+      <div class="card"><div class="label">Errors</div><div class="value">--</div></div>
+      <div class="card"><div class="label">Estimated cost</div><div class="value">--</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>Agents</h2>
+      <table>
+        <thead><tr><th>Agent</th><th>Provider</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Order Status Assistant</td><td>Bedrock</td><td>Running</td></tr>
+          <tr><td>Claims Triage Agent</td><td>Claude Code</td><td>Running</td></tr>
+          <tr><td>Support Summarizer</td><td>LangChain</td><td>Running</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <aside class="chat">
+    <div class="chat-head">Ops Assistant</div>
+    <div class="chat-body">
+      <!-- Replace this placeholder with the Boomi Embed Kit snippet for the Control Tower Live Analyst agent -->
+      <div id="agent-embed" class="embed-placeholder">
+        Agent embed goes here
+      </div>
+    </div>
+  </aside>
+</main>
+</body>
+</html>
