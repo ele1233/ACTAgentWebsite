@@ -51,7 +51,7 @@
   <section>
     <h1>Agent Overview</h1>
     <p class="sub">Snapshot of your AI agents. Ask the assistant for more detail.</p>
-
+    <p id="m-timeframe" style="font-size:14px;color:#6b7280;margin:0 0 12px;">Ask the assistant for metrics to see the time frame.</p>
     <div class="cards" style="grid-template-columns: repeat(5, 1fr);">
       <div class="card"><div class="label">Total Tokens</div><div class="value" id="m-total-tokens">--</div></div>
       <div class="card"><div class="label">Model Invocations</div><div class="value" id="m-model-invocations">--</div></div>
@@ -81,7 +81,7 @@
     { label: "Total Tokens",       id: "m-total-tokens" },
     { label: "Model Invocations",  id: "m-model-invocations" },
     { label: "Total Invocations",  id: "m-total-invocations" },
-    { label: "Sessions",     id: "m-total-sessions" },
+    { label: "Sessions",           id: "m-total-sessions" },
     { label: "Total Cost",         id: "m-total-cost",       prefix: "$" },
     { label: "Input Tokens",       id: "m-input-tokens" },
     { label: "Output Tokens",      id: "m-output-tokens" },
@@ -96,6 +96,21 @@
     return last;
   }
 
+  function lastDays(text) {
+    var re = /(?:last|past)\s+(\d+)\s+days/gi;
+    var m, last = null;
+    while ((m = re.exec(text)) !== null) { last = m[1]; }
+    return last;
+  }
+
+  function updateTimeframe(text) {
+    var el = document.getElementById("m-timeframe");
+    var days = lastDays(text);
+    if (!el || days === null) return;
+    var scope = /all providers|total providers/i.test(text) ? "All providers" : "Selected providers";
+    el.textContent = scope + ", past " + days + " days";
+  }
+
   function update(root) {
     var text = root.textContent || "";
     metrics.forEach(function (item) {
@@ -105,6 +120,7 @@
         el.textContent = (item.prefix || "") + value + (item.suffix || "");
       }
     });
+    updateTimeframe(text);
   }
 
   var attached = false;
