@@ -45,9 +45,6 @@
 <body>
 <header>
   <div class="brand">Northwind Operations</div>
-  <nav>
-    <a href="#" class="active">Dashboard</a>
-  </nav>
 </header>
 
 <main class="layout">
@@ -80,27 +77,32 @@
 </main>
 <script>
 (function () {
-  var cards = [
-    { id: "metric-invocations", label: /Model Invocations:\s*([\d,]+)/gi, prefix: "" },
-    { id: "metric-errors",      label: /Errors:\s*([\d,]+)/gi,            prefix: "" },
-    { id: "metric-cost",        label: /Total Cost:\s*\$?\s*([\d,]+(?:\.\d+)?)/gi, prefix: "$" }
+  var metrics = [
+    { label: "Total Tokens",       id: "m-total-tokens" },
+    { label: "Model Invocations",  id: "m-model-invocations" },
+    { label: "Total Invocations",  id: "m-total-invocations" },
+    { label: "Total Sessions",     id: "m-total-sessions" },
+    { label: "Total Cost",         id: "m-total-cost",       prefix: "$" },
+    { label: "Input Tokens",       id: "m-input-tokens" },
+    { label: "Output Tokens",      id: "m-output-tokens" },
+    { label: "Errors",             id: "m-errors" },
+    { label: "Success Rate",       id: "m-success-rate",     suffix: "%" }
   ];
 
-  function lastMatch(text, re) {
+  function lastMatch(text, label) {
+    var re = new RegExp(label + ":\\s*\\$?\\s*([\\d,]+(?:\\.\\d+)?)", "g");
     var m, last = null;
-    re.lastIndex = 0;
     while ((m = re.exec(text)) !== null) { last = m[1]; }
     return last;
   }
 
   function update(root) {
     var text = root.textContent || "";
-    cards.forEach(function (card) {
-      var value = lastMatch(text, card.label);
-      var el = document.getElementById(card.id);
+    metrics.forEach(function (item) {
+      var value = lastMatch(text, item.label);
+      var el = document.getElementById(item.id);
       if (value !== null && el) {
-        el.textContent = card.prefix + value;
-        el.style.fontSize = "";
+        el.textContent = (item.prefix || "") + value + (item.suffix || "");
       }
     });
   }
