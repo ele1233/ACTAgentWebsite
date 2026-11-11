@@ -30,6 +30,17 @@
   .embed-placeholder { border: 2px dashed var(--border); border-radius: 8px; min-height: 430px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); font-size: 14px; padding: 20px; }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr; } }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@boomi/embedkit-cdn/embedkit-cdn.css" />
+<script>
+  window.BoomiEmbed = {
+    publicToken: "pk_537a432d-0702-4e72-9b54-0cb77cb2744b",
+    agentId: "project_85abe430-be23-4c54-968f-651f45b03ad8",
+    mountId: "boomi-agent",
+    serverBase: "https://api.boomi.space/api/v1"
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@boomi/embedkit-cdn/embedkit-cdn.umd.js" async></script>
+<div id="boomi-agent"></div>
 </head>
 <body>
 <header>
@@ -69,10 +80,9 @@
   <aside class="chat">
     <div class="chat-head">Ops Assistant</div>
     <div class="chat-body">
-      <!-- Replace this placeholder with the Boomi Embed Kit snippet for the Control Tower Live Analyst agent -->
+ <div id="boomi-agent"></div>
       <div id="agent-embed" class="embed-placeholder">
-        Agent embed goes here
-      </div>
+<div id="boomi-agent"></div>      </div>
     </div>
   </aside>
 </main>
