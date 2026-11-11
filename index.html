@@ -83,4 +83,13 @@
   </aside>
 </main>
 </body>
+  <script>
+  setTimeout(function () {
+    var mount = document.getElementById("boomi-agent");
+    console.log("mount found:", !!mount);
+    console.log("iframes on page:", document.querySelectorAll("iframe").length);
+    console.log("mount has shadow root:", !!(mount && mount.shadowRoot));
+    console.log("mount child elements:", mount ? mount.children.length : 0);
+  }, 5000);
+</script>
 </html>
