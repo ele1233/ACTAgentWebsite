@@ -59,9 +59,9 @@
     <p class="sub">Snapshot of your AI agents. Ask the assistant for more detail.</p>
 
     <div class="cards">
-      <div class="card"><div class="label">Model invocations</div><div class="value">--</div></div>
-      <div class="card"><div class="label">Errors</div><div class="value">--</div></div>
-      <div class="card"><div class="label">Estimated cost</div><div class="value">--</div></div>
+      <div class="card"><div class="label">Model invocations</div><div class="value" id="metric-invocations" style="font-size:18px;">Ask the assistant</div></div>
+      <div class="card"><div class="label">Errors</div><div class="value" id="metric-errors" style="font-size:18px;">Ask the assistant</div></div>
+      <div class="card"><div class="label">Estimated cost</div><div class="value" id="metric-cost" style="font-size:18px;">Ask the assistant</div></div>
     </div>
 
     <div class="panel">
@@ -82,14 +82,46 @@
     </div>
   </aside>
 </main>
-</body>
-  <script>
-  setTimeout(function () {
+<script>
+(function () {
+  var cards = {
+    invocations: { id: "metric-invocations", re: /invocations?\D{0,20}?([\d,]+)/gi, prefix: "" },
+    errors:      { id: "metric-errors",      re: /errors?\D{0,20}?([\d,]+)/gi,      prefix: "" },
+    cost:        { id: "metric-cost",        re: /total cost\D{0,20}?\$?\s*([\d,]+(?:\.\d+)?)/gi, prefix: "$" }
+  };
+
+  function lastMatch(text, re) {
+    var m, last = null;
+    re.lastIndex = 0;
+    while ((m = re.exec(text)) !== null) { last = m[1]; }
+    return last;
+  }
+
+  function update(root) {
+    var text = root.textContent || "";
+    Object.keys(cards).forEach(function (key) {
+      var card = cards[key];
+      var value = lastMatch(text, card.re);
+      var el = document.getElementById(card.id);
+      if (value !== null && el) {
+        el.textContent = card.prefix + value;
+        el.style.fontSize = "";
+      }
+    });
+  }
+
+  var attached = false;
+  var timer = setInterval(function () {
     var mount = document.getElementById("boomi-agent");
-    console.log("mount found:", !!mount);
-    console.log("iframes on page:", document.querySelectorAll("iframe").length);
-    console.log("mount has shadow root:", !!(mount && mount.shadowRoot));
-    console.log("mount child elements:", mount ? mount.children.length : 0);
-  }, 5000);
+    if (!mount || !mount.shadowRoot || attached) return;
+    attached = true;
+    clearInterval(timer);
+    var root = mount.shadowRoot;
+    new MutationObserver(function () { update(root); })
+      .observe(root, { childList: true, subtree: true, characterData: true });
+    update(root);
+  }, 2000);
+})();
 </script>
+</body>
 </html>
