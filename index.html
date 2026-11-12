@@ -52,7 +52,7 @@
     <h1>Agent Overview</h1>
     <p class="sub">Snapshot of your AI agents. Ask the assistant for more detail.</p>
     <p id="m-timeframe" style="font-size:14px;color:#6b7280;margin:0 0 12px;">Ask the assistant for metrics to see the time frame.</p>
-         <button id="export-btn" style="position:relative;z-index:10;margin:0 0 16px;padding:8px 14px;border:1px solid #d1d5db;border-radius:6px;background:#ffffff;cursor:pointer;font-size:14px;">Download CSV</button>
+       <button id="export-btn" onclick="downloadMetrics()" style="margin:0 0 16px;padding:8px 14px;border:1px solid #d1d5db;border-radius:6px;background:#ffffff;cursor:pointer;font-size:14px;">Download CSV</button>
     <div class="cards" style="grid-template-columns: repeat(5, 1fr);">
       <div class="card"><div class="label">Total Tokens</div><div class="value" id="m-total-tokens">--</div></div>
       <div class="card"><div class="label">Model Invocations</div><div class="value" id="m-model-invocations">--</div></div>
@@ -138,35 +138,32 @@
 })();
 </script>
 <script>
-(function () {
-  var btn = document.getElementById("export-btn");
-  if (!btn) return;
-  btn.addEventListener("click", function () {
-    var rows = [["Metric", "Value"]];
-    var tf = document.getElementById("m-timeframe");
-    rows.push(["Time frame", tf ? tf.textContent : ""]);
-    document.querySelectorAll(".card").forEach(function (card) {
-      rows.push([
-        card.querySelector(".label").textContent,
-        card.querySelector(".value").textContent
-      ]);
-    });
-    var csv = rows.map(function (r) {
-      return r.map(function (c) {
-        return '"' + String(c).replace(/"/g, '""') + '"';
-      }).join(",");
-    }).join("\r\n");
-    var blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url;
-    a.download = "agent-metrics-" + new Date().toISOString().slice(0, 10) + ".csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+function downloadMetrics() {
+  var rows = [["Scope", "Metric", "Value"]];
+  var scopeEl = document.getElementById("m-timeframe");
+  var scope = scopeEl ? scopeEl.textContent : "";
+  document.querySelectorAll(".card").forEach(function (card) {
+    rows.push([
+      scope,
+      card.querySelector(".label").textContent,
+      card.querySelector(".value").textContent
+    ]);
   });
-})();
+  var csv = rows.map(function (r) {
+    return r.map(function (c) {
+      return '"' + String(c).replace(/"/g, '""') + '"';
+    }).join(",");
+  }).join("\r\n");
+  var blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "agent-metrics-" + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+}
 </script>
 </body>
 </html>
