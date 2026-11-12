@@ -171,7 +171,7 @@ document.addEventListener("click", function (e) {
   var out = document.getElementById("debug");
   if (!out) return;
   var t = e.target;
-  out.textContent = "Click hit: <" + t.tagName.toLowerCase() + "> id=" + (t.id || "none") + " class=" + (t.className || "none");
+  out.textContent =
 }, true);
 window.addEventListener("error", function (e) {
   var out = document.getElementById("debug");
