@@ -53,6 +53,7 @@
     <p class="sub">Snapshot of your AI agents. Ask the assistant for more detail.</p>
     <p id="m-timeframe" style="font-size:14px;color:#6b7280;margin:0 0 12px;">Ask the assistant for metrics to see the time frame.</p>
           <button id="export-btn" onclick="downloadMetrics()" style="position:relative;z-index:10;margin:0 0 16px;padding:8px 14px;border:1px solid #d1d5db;border-radius:6px;background:#ffffff;cursor:pointer;font-size:14px;">Download CSV</button>
+       <pre id="debug" style="font-size:12px;color:#6b7280;margin:0 0 12px;">Click the button to see what it hits.</pre>
     <div class="cards" style="grid-template-columns: repeat(5, 1fr);">
       <div class="card"><div class="label">Total Tokens</div><div class="value" id="m-total-tokens">--</div></div>
       <div class="card"><div class="label">Model Invocations</div><div class="value" id="m-model-invocations">--</div></div>
@@ -164,6 +165,18 @@ function downloadMetrics() {
   a.remove();
   setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
 }
+</script>
+<script>
+document.addEventListener("click", function (e) {
+  var out = document.getElementById("debug");
+  if (!out) return;
+  var t = e.target;
+  out.textContent = "Click hit: <" + t.tagName.toLowerCase() + "> id=" + (t.id || "none") + " class=" + (t.className || "none");
+}, true);
+window.addEventListener("error", function (e) {
+  var out = document.getElementById("debug");
+  if (out) out.textContent += " | Error: " + e.message;
+});
 </script>
 </body>
 </html>
